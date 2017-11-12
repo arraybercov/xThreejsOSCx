@@ -14,18 +14,29 @@
 <body>
 
 <script src="js/three.minR88.js"></script>
-<!-- <script src="js/OrbitControls.js"></script> -->
 <script src="js/webmidi2r10/webmidi.js"></script>
 <script src="js/webmidiSetup.js"></script>
-<script src="js/webmidi.js/osc-browser.js"
+<script src="js/osc-browser.js"></script>
+<script src="js/OrbitControls.js"></script>
 
 <script>
 
 "use strict";
 
-var camera, scene, renderer;
+var camera, scene, renderer, controls;
 var geometry, material, mesh;
 var cc1 = 0;
+// Tidal sends on 57120
+var oscPort = new osc.WebSocketPort({
+    url: "ws://localhost:57120", // URL to your Web Socket server.
+    metadata: true
+});
+
+oscPort.open();
+
+oscPort.on("message", function (oscMsg) {
+    console.log("An OSC message just arrived!", oscMsg);
+});
 
 init();
 animate();
@@ -46,6 +57,11 @@ function init( ) {
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
+  controls.enablePan = false;
+  controls.enableKeys = true;
+  controls.maxDistance = 70;
+  controls.minDistance = 0.3;
 
 }
 
@@ -61,6 +77,10 @@ function render( ) {
 
 	mesh.rotation.x = cc1 * 0.0009;
   mesh.rotation.y = cc1 * 0.005;
+
+//   if (!cc1 == 0){
+//   mesh.scale.set( cc1 * 0.01, cc1 * 0.02, cc1 * 0.09 );
+// }
 
 
 

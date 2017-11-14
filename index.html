@@ -14,10 +14,7 @@
 <body>
 
 <script src="js/three.minR88.js"></script>
-<!-- <script src="js/webmidi2r10/webmidi.js"></script> -->
-<!-- <script src="js/webmidiSetup.js"></script> -->
 <script src="js/osc-browser.js"></script>
-<script src="js/osc-chromeapp.js"></script>
 <script src="js/osc.js"></script>
 <script src="js/OrbitControls.js"></script>
 
@@ -27,9 +24,7 @@
 
 var camera, scene, renderer, controls;
 var geometry, material, mesh;
-var cc1 = 0;
-var osc1 = 1;
-// Tidal sends on 57120
+var osc1 = 0.25;
 
 var oscPort = new osc.WebSocketPort({
     url: "ws://localhost:8081", // URL to your Web Socket server.
@@ -45,32 +40,17 @@ function foo(oscMsg) {
     var value = oscMsg.args[i+1].value
     data[key] = value;
   }
+
   if (data.speed) {
     osc1 = data.speed;
   }
   console.log(osc1)
-
 }
+
 oscPort.on("message", function (oscMsg) {
-    //console.log("An OSC message just arrived!", oscMsg);
+    console.log("An OSC message just arrived!", oscMsg);
     foo(oscMsg);
 });
-
-// // Create an osc.js UDP Port listening on port 57121.
-// var udpPort = new osc.UDPPort({
-//     localAddress: "0.0.0.0",
-//     localPort: 57120,
-//     metadata: true
-// });
-//
-// // Listen for incoming OSC bundles.
-// udpPort.on("bundle", function (oscBundle, timeTag, info) {
-//     console.log("An OSC bundle just arrived for time tag", timeTag, ":", oscBundle);
-//     console.log("Remote info is: ", info);
-// });
-//
-// // Open the socket.
-// udpPort.open();
 
 init();
 animate();
@@ -110,8 +90,8 @@ function render( ) {
 	var time = Date.now() * 0.0001;
 
 // if (!cc1 == 0){
-  	mesh.rotation.x = osc1 * 0.0009;
-    mesh.rotation.y = osc1 * 0.005;
+  	mesh.rotation.x = osc1 * 5;
+    mesh.rotation.y = osc1 * 5;
   // }
 
 //   if (!cc1 == 0){
@@ -121,7 +101,7 @@ function render( ) {
 
 
 // 	mesh.rotation.x += Math.sin( time * 0.5 ) * 1;
-// 	mesh.rotation.y = Math.sin( time * 1 ) * 1;
+	mesh.rotation.y = Math.sin( time * 1 ) * 1;
 
 	renderer.render( scene, camera );
 

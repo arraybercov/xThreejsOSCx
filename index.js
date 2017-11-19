@@ -23,7 +23,7 @@ var getIPAddresses = function () {
 // Bind to a UDP socket to listen for incoming OSC events.
 var udpPort = new osc.UDPPort({
     localAddress: "0.0.0.0",
-    localPort: 57120
+    localPort: 4000
 });
 
 udpPort.on("ready", function () {
@@ -38,7 +38,7 @@ udpPort.on("ready", function () {
 udpPort.open();
 
 // Create an Express-based Web Socket server to which OSC messages will be relayed.
-var appResources = __dirname + "/web",
+var appResources = __dirname + "",
     app = express(),
     server = app.listen(8081),
     wss = new WebSocket.Server({

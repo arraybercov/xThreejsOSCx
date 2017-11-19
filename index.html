@@ -15,17 +15,17 @@
 
 <script src="js/three.minR88.js"></script>
 <script src="js/osc-browser.js"></script>
-<!-- <script src="js/osc-chromeapp.js"></script> -->
-<!-- <script src="js/osc.js"></script> -->
 <script src="js/OrbitControls.js"></script>
 
 <script>
 
-"use strict";
+// "use strict";
 
 var camera, scene, renderer, controls;
 var geometry, material, mesh;
 var osc1 = 0.25;
+var bd1 = "bd";
+// var data = {};
 
 var oscPort = new osc.WebSocketPort({
     url: "ws://localhost:8081", // URL to your Web Socket server.
@@ -42,16 +42,29 @@ function foo(oscMsg) {
     data[key] = value;
   }
 
+// changed from data.speed because of VedaMate's sclang filter
   if (data.speed) {
     osc1 = data.speed;
   }
   console.log(osc1)
+
+  if (data.s == "bd") {
+    bd1 = data.s;
+  }
+  else {bd1 = "poop"}
+  console.log(bd1)
 }
+
+
 
 oscPort.on("message", function (oscMsg) {
     console.log("An OSC message just arrived!", oscMsg);
     foo(oscMsg);
 });
+
+// var bass2 = args[0].value;
+// var bd = args[1].value;
+// var sd = args[2].value;
 
 init();
 animate();
@@ -77,7 +90,6 @@ function init( ) {
   controls.enableKeys = true;
   controls.maxDistance = 70;
   controls.minDistance = 0.3;
-
 }
 
 function animate( ) {
@@ -92,7 +104,22 @@ function render( ) {
 
 // if (!cc1 == 0){
   	mesh.rotation.x = osc1 * 5;
-    mesh.rotation.y = osc1 * 5;
+
+if (bd1 == "bd"){
+    mesh.scale.set(1, 5, 1);
+  }
+if (bd1 == "poop"){
+    mesh.scale.set(1, 1, 1);
+  }
+    // mesh.color.set(0xff0000);
+
+// if (!bd == 0){
+//   mesh.visible = true;
+// }
+// else {
+//   mesh.visible = false;
+// }
+
   // }
 
 //   if (!cc1 == 0){
